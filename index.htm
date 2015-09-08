@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>SignalR Concept Map</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link href="ShapeShare.css" rel="Stylesheet" />
+    <script src="../../Scripts/signalr.samples.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui-1.9.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/json2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.signalR.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.contextmenu.r2.packed.js" type="text/javascript"></script>
+    <script src="../../signalr/hubs" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="ShapeShare.js" type="text/javascript"></script>
+
+</head>
+<body>
+    <!--<div id="new-user">
+        <form id="join" action="#">
+            <label for="username">Name:</label>
+            <input type="text" id="username" />
+            <input type="submit" value="Join" />
+        </form>
+    </div>-->
+
+    <label>Group: </label><input type="text" id="group" />
+        <input type="submit"  id="send" value="Join" class="send" />
+    <div id="shape-area">
+        <div class="well sidebar-nav">
+                  
+             
+        <menu id="toolbar">
+            <li>
+                <menu label="add">
+                    <li><B>TOOLBOX</B></li>
+                    <li><a href="#" class="rectangle" title="add rectangle" accesskey="R">
+                        <div id="toolbar_blue" class="toolbar_padding toolbar_blue  ui-draggable"></div>
+                        </a>
+
+                    </li>
+                    <!--<li><a href="#" class="square" title="add square" accesskey="S">S</a></li>
+                    <li><a href="#" class="circle" title="add circle" accesskey="C">C</a></li>
+                    <li><a href="#" class="picture" title="add picture" accesskey="P">P</a></li>-->
+                </menu>
+            </li>
+            <!--<li>
+                <a href="#" class="delete" title="delete all shapes">D</a>
+            </li>-->
+            <li>
+                            <img src="images/save-icon.jpg" width="100" />
+            </li>
+            <li>
+                <!--<label for="user">User: </label>
+                <input id="user" type="text" value="" />-->
+                <a href="#" id="update">update</a>
+            </li>
+        </menu>
+           </div>
+        <div id="shapes">
+        </div>
+    </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                //$('#jsonData').html($('#shapes').html());
+                alert($('#shapes').html());
+                $('#update').click(function () {
+
+                    $('#shapes').html($('#shapes').html());
+                });
+
+
+            });
+    </script>
+           <span id="jsonData"></span>
+    <span id="jsonConnection"></span>
+</body>
+</html>

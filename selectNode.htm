@@ -1,0 +1,366 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="node.aspx.cs" Inherits="Microsoft.AspNet.SignalR.Samples.Hubs.ShapeShare.node" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>GridView Add, Edit, Delete AJAX Way</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="http://code.jquery.com/ui/1.9.2/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script type = "text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+         <script src="../../Scripts/bootstrap.js"></script>
+
+<script type = "text/javascript" src = "scripts/transition.js"></script>
+<script type = "text/javascript">
+    /*function BlockUI(elementID) {
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        prm.add_beginRequest(function () {
+            $("#" + elementID).block({
+                message: '<table align = "center"><tr><td>' +
+                 '<img src="images/loadingAnim.gif"/></td></tr></table>',
+                css: {},
+                overlayCSS: {
+                    backgroundColor: '#000000', opacity: 0.6, border: '3px solid #63B2EB'
+                }
+            });
+        });
+        prm.add_endRequest(function () {
+            $("#" + elementID).unblock();
+        });
+    }
+    $(document).ready(function () {
+
+        BlockUI("dvGrid");
+        $.blockUI.defaults.css = {};
+    });*/
+    $(document).ready(function () {
+        $('#copy').click(function () {
+            $('#GridView1 tr:last').before('<tr><td>10</td><td>Field Name 1</td><td>Field Value 1</td><td><a onclick="return confirm(\'Do you want to delete?\');">刪除</a></td><td><a href="#" style="color:#333333;">編輯</a></td></tr>');
+            $('#GridView2 tr:last').before('<tr><td>11</td><td>Field Name 2</td><td>Field Value 2</td><td><a onclick="return confirm(\'Do you want to delete?\');">刪除</a></td><td><a href="#" style="color:#333333;">編輯</a></td></tr>');
+        });
+       
+        $("#view").click(function () {
+            $("#viewdiv").toggle();
+        });
+    });
+    $(function () {
+        $("#viewdiv").draggable();
+    });
+    $(document).mouseup(function (e) {
+        var container = $("#viewdiv");
+
+        if (!container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+            container.hide();
+        }
+    });
+</script> 
+<style>
+    .autocomplete
+    {
+        margin-top: 10px;
+    }
+    #viewdiv { width: 150px; height: 150px; padding: 0.5em; position:absolute;z-index:3;background-color:white;}
+</style>
+</head>
+<body style ="margin:0;padding:0;">
+        <form id="form1" runat="server" class="form-horizontal" role="form">
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#home" data-toggle="tab">節點Template</a></li>
+  <li><a href="#profile" data-toggle="tab">新增節點Template</a></li>
+</ul>
+    <!-- Tab panes -->
+<div class="tab-content" style="overflow:hidden;">
+  <div class="tab-pane active" id="home">
+      <div class="container theme-showcase" style="margin-bottom:10px;">
+      <asp:DropDownList ID="DropDownList1" runat="server">
+          <asp:ListItem>Node Template1</asp:ListItem>
+          <asp:ListItem>Node Template2</asp:ListItem>
+          <asp:ListItem>Node Template3</asp:ListItem>
+      </asp:DropDownList>
+    </div>
+       <div class="container theme-showcase">
+         <asp:gridview id="AuthorsGridView" 
+        autogeneratecolumns="true" 
+        runat="server" CssClass="table table-bordered" Width="70%">
+      </asp:gridview>
+           <button type="button" class="btn btn-primary">OK</button>
+           <div>
+        <asp:DropDownList ID="ddlEmployee" AutoPostBack="true" runat="server" DataTextField="TemplateName" DataValueField="TemplateID">
+        </asp:DropDownList>
+    </div>
+ 
+    <asp:GridView ID="grdEmployee" runat="server" SelectMethod="GetEmployees" >
+    </asp:GridView>
+    </div>
+      </div> 
+   
+  <div class="tab-pane" id="profile">
+      <div class="container theme-showcase" style="margin-top:10px;">
+            <asp:Label ID="Label1" runat="server" Text="Node Name : " ></asp:Label>
+            <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control"></asp:TextBox>
+      <div class="container theme-showcase" style="margin-top:10px;">
+          <asp:Label ID="Label2" runat="server" Text="Node Template : "></asp:Label>
+          <asp:DropDownList ID="DropDownList2" runat="server">
+                <asp:ListItem>Node Template1</asp:ListItem>
+                <asp:ListItem>Node Template2</asp:ListItem>
+                <asp:ListItem>Node Template3</asp:ListItem>
+          </asp:DropDownList>&nbsp;
+          <input id="view" type="button" data-target="#myModal" value="View" class="btn" />&nbsp;
+          &nbsp;
+          <!----view----->
+          <div id="viewdiv" style="display: none;"  class="ui-widget-content">
+               <input id="copy" type="button" value="Copy" class="btn" />
+          </div>
+          <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Node Template 1</h4>
+      </div>
+      <div class="modal-body">
+        <div class="panel-group" id="Div3">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          Application General
+        </a>
+      </h4>
+    </div>
+ <div id="Div4" class="panel-collapse collapse in">
+     <div class="panel-body">
+    <div id="Div5" style="padding:10px;width:95%">
+        <div id="Div6">
+	
+       <div>
+		<table class="table table-bordered" cellspacing="0" cellpadding="4" rules="all" border="1" id="Table1" style="color:#333333;font-family:Arial;font-size:11pt;width:95%;border-collapse:collapse;">
+			<tbody><tr style="background-color:White;">
+				<th scope="col"></th><th scope="col">Node Application ID</th><th scope="col">Field Name</th><th scope="col">Field Value</th>
+			</tr><tr>
+                <td style="width:30px;">
+                <span id="Span1"><input type="checkbox" checked="checked" /></span>
+            </td>
+				<td style="width:30px;">
+                <span id="GridView1_lblCustomerID_0">10</span>
+            </td><td style="width:100px;">
+                <span id="GridView1_lblContactName_0">Field Name 1</span>
+            </td><td style="width:150px;">
+                <span id="GridView1_lblCompany_0">Field Value 1</span>
+            </td></tr>
+		</tbody></table>
+	</div> 
+    
+</div> 
+    </div>
+            </div>
+     </div>
+       </div>
+     </div>
+          <div class="panel-group" id="Div7">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          Application Specific
+        </a>
+      </h4>
+    </div>
+ <div id="Div8" class="panel-collapse collapse in">
+     <div class="panel-body">
+          <div id="Div9" style="padding:10px;width:95%">
+         <div>
+	<table class="table table-bordered" cellspacing="0" cellpadding="4" rules="all" border="1" id="Table2" style="color:#333333;font-family:Arial;font-size:11pt;width:95%;border-collapse:collapse;">
+		<tbody><tr style="background-color:White;">
+			<th scope="col"></th><th scope="col">Node Application ID</th><th scope="col">Field Name</th><th scope="col">Field Value</th>
+		</tr><tr>
+            <td style="width:30px;">
+                <span id="Span2"><input type="checkbox" checked="checked" /></span>
+            </td>
+			<td style="width:30px;">
+                <span id="GridView2_lblCustomerID_0">11</span>
+            </td><td style="width:150px;">
+                <span id="GridView2_lblContactName_0">Field Name 2</span>
+            </td><td style="width:150px;">
+                <span id="GridView2_lblCompany_0">Field Value 2</span>
+            </td></tr>
+	</tbody></table>
+</div><button type="button" class="btn btn-primary">OK</button>
+         </div>
+     </div>
+      </div>
+      </div>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+      </div>
+        <asp:ScriptManager ID="ScriptManager1" runat="server">
+        </asp:ScriptManager>
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          Application General
+        </a>
+      </h4>
+    </div>
+ <div id="collapseOne" class="panel-collapse collapse in">
+     <div class="panel-body">
+    <div id = "dvGrid" style ="padding:10px;width:80%">
+        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+        <ContentTemplate>
+       <asp:GridView ID="GridView1" runat="server"  Width = "80%"
+        AutoGenerateColumns = "False" Font-Names = "Arial" 
+        Font-Size = "11pt" 
+        HeaderStyle-BackColor = "White" AllowPaging ="True"  ShowFooter = "True"  
+        OnPageIndexChanging = "OnPaging" onrowediting="EditCustomer"
+        onrowupdating="UpdateCustomer"  onrowcancelingedit="CancelEdit" CellPadding="4" ForeColor="#333333" GridLines="Both" CssClass="table table-bordered" >
+       <Columns>
+        <asp:TemplateField ItemStyle-Width = "30px"  HeaderText = "Node Application ID">
+            <ItemTemplate>
+                <asp:Label ID="lblCustomerID" runat="server" Text='<%# Eval("NodeApplicationID")%>'></asp:Label>
+            </ItemTemplate> 
+            <FooterTemplate>
+                <!--<asp:TextBox ID="txtCustomerID" Width = "40px" MaxLength = "5" runat="server"></asp:TextBox>-->
+            </FooterTemplate> 
+            <ItemStyle Width="30px" />
+        </asp:TemplateField> 
+        <asp:TemplateField ItemStyle-Width = "100px"  HeaderText = "Field Name">
+            <ItemTemplate>
+                <asp:Label ID="lblContactName" runat="server" Text='<%# Eval("FieldName")%>'></asp:Label>
+            </ItemTemplate>
+            <EditItemTemplate>
+                
+                <asp:TextBox ID="txtContactName" runat="server" Text='<%# Eval("FieldName")%>'></asp:TextBox>
+            </EditItemTemplate>  
+            <FooterTemplate>
+                <asp:TextBox ID="TextBox2" runat="server" AutoCompleteType="Search"></asp:TextBox>
+            </FooterTemplate> 
+            <ItemStyle Width="100px" />
+        </asp:TemplateField>
+        <asp:TemplateField ItemStyle-Width = "150px"  HeaderText = "Field Value">
+            <ItemTemplate>
+                <asp:Label ID="lblCompany" runat="server" Text='<%# Eval("FieldValue")%>'></asp:Label>
+            </ItemTemplate>
+            <EditItemTemplate>
+                <asp:TextBox ID="txtCompany" runat="server" Text='<%# Eval("FieldValue")%>'></asp:TextBox>
+                
+            </EditItemTemplate>  
+            <FooterTemplate>
+                <asp:TextBox ID="txtCompany" runat="server"></asp:TextBox>
+            </FooterTemplate> 
+            <ItemStyle Width="150px" />
+        </asp:TemplateField>
+        <asp:TemplateField>
+            <ItemTemplate>
+                <asp:LinkButton ID="lnkRemove" runat="server" CommandArgument = '<%# Eval("NodeApplicationID")%>' 
+                 OnClientClick = "return confirm('Do you want to delete?')"
+                Text = "刪除" OnClick = "DeleteCustomer"></asp:LinkButton>
+            </ItemTemplate>
+             <FooterTemplate>
+                <asp:Button ID="btnAdd" runat="server" Text="新增" OnClick = "AddNewCustomer" cssClass="btn btn-default" />
+            </FooterTemplate> 
+        </asp:TemplateField> 
+        <asp:CommandField  ShowEditButton="True" /> 
+       </Columns> 
+    </asp:GridView> 
+    </ContentTemplate> 
+    <Triggers>
+        <asp:AsyncPostBackTrigger ControlID = "GridView1" /> 
+    </Triggers> 
+    </asp:UpdatePanel> 
+    </div>
+            </div>
+     </div>
+       </div>
+     </div>
+        <div class="panel-group" id="Div1">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          Application Specific
+        </a>
+      </h4>
+    </div>
+ <div id="collapseTwo" class="panel-collapse collapse in">
+     <div class="panel-body" >
+          <div id = "Div2" style ="padding:10px;width:80%">
+         <asp:GridView ID="GridView2" runat="server"  Width = "80%"
+        AutoGenerateColumns = "False" Font-Names = "Arial" 
+        Font-Size = "11pt" 
+        HeaderStyle-BackColor = "White" AllowPaging ="True"  ShowFooter = "True"  
+        OnPageIndexChanging = "OnPaging" onrowediting="EditCustomer"
+        onrowupdating="UpdateCustomer"  onrowcancelingedit="CancelEdit" CellPadding="4" ForeColor="#333333" GridLines="Both" CssClass="table table-bordered" >
+       <Columns>
+        <asp:TemplateField ItemStyle-Width = "30px"  HeaderText = "Node Application ID">
+            <ItemTemplate>
+                <asp:Label ID="lblCustomerID" runat="server" Text='<%# Eval("NodeApplicationID")%>'></asp:Label>
+            </ItemTemplate> 
+            <FooterTemplate>
+                <!--<asp:TextBox ID="txtCustomerID" Width = "40px" MaxLength = "5" runat="server"></asp:TextBox>-->
+            </FooterTemplate> 
+            <ItemStyle Width="30px" />
+        </asp:TemplateField> 
+        <asp:TemplateField ItemStyle-Width = "150px"  HeaderText = "Field Name">
+            <ItemTemplate>
+                <asp:Label ID="lblContactName" runat="server" Text='<%# Eval("FieldName")%>'></asp:Label>
+            </ItemTemplate>
+            <EditItemTemplate>
+                
+                <asp:TextBox ID="txtContactName" runat="server" Text='<%# Eval("FieldName")%>'></asp:TextBox>
+            </EditItemTemplate>  
+            <FooterTemplate>
+                 <asp:TextBox ID="txtCompany1" runat="server"></asp:TextBox>
+            </FooterTemplate> 
+            <ItemStyle Width="150px" />
+        </asp:TemplateField>
+        <asp:TemplateField ItemStyle-Width = "150px"  HeaderText = "Field Value">
+            <ItemTemplate>
+                <asp:Label ID="lblCompany" runat="server" Text='<%# Eval("FieldValue")%>'></asp:Label>
+            </ItemTemplate>
+            <EditItemTemplate>
+                <asp:TextBox ID="txtCompany" runat="server" Text='<%# Eval("FieldValue")%>'></asp:TextBox>
+                
+            </EditItemTemplate>  
+            <FooterTemplate>
+                <asp:TextBox ID="txtCompany" runat="server"></asp:TextBox>
+            </FooterTemplate> 
+            <ItemStyle Width="150px" />
+        </asp:TemplateField>
+        <asp:TemplateField>
+            <ItemTemplate>
+                <asp:LinkButton ID="lnkRemove" runat="server" CommandArgument = '<%# Eval("NodeApplicationID")%>' 
+                 OnClientClick = "return confirm('Do you want to delete?')"
+                Text = "刪除" OnClick = "DeleteCustomer"></asp:LinkButton>
+            </ItemTemplate>
+             <FooterTemplate>
+                <asp:Button ID="btnAdd" runat="server" Text="新增" OnClick = "AddNewCustomer" cssClass="btn btn-default" />
+            </FooterTemplate> 
+        </asp:TemplateField> 
+        <asp:CommandField  ShowEditButton="True" /> 
+       </Columns> 
+    </asp:GridView>
+         </div>
+     </div>
+      </div>
+      </div>
+            </div>
+        <asp:Button ID="Button1" runat="server" Text="Submit" CssClass="btn btn-success" />&nbsp;
+        <asp:Button ID="Button2" runat="server" Text="Cancel" CssClass="btn btn-warning" />
+   
+</div></div>
+</div>
+             </form>
+</body>
+</html>

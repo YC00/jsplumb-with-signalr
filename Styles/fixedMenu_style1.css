@@ -1,0 +1,76 @@
+body{
+    padding:0;
+    margin:0;
+}
+.filemenu{
+      font: 13px/27px Arial,sans-serif;
+
+      color:#000;
+      height:30px;
+}
+.filemenu a:hover{
+    background-color:#eee;
+}
+.filemenu a {
+    text-decoration: none;
+	display: block;
+    height: 25px;
+    padding: 5px 8px 0 8px;
+    position:relative;
+    color:#000;
+    outline:none;
+}
+.filemenu ul{
+    list-style: none;
+    margin:0;
+    padding:0 0 0 0px;
+}
+.filemenu ul li{
+    padding:0;
+    float:left;
+    
+}
+.filemenu ul li ul li{
+    padding:0;
+    float:none;
+    margin: 0 0 0 0px;
+    width:100%;
+}
+.filemenu ul li ul{
+    position: absolute;
+    border: 1px solid #eee;
+    -webkit-box-shadow: 0 2px 4px #CCCCCC;
+	box-shadow: 0 2px 4px #CCCCCC;
+    margin-top: -1px;
+    display:none;
+    padding: 0px 16px 0px 0;
+}
+.active ul{
+    display:block !important; 
+}
+.active a{
+    background-color: white;
+    border: 1px solid #eee;
+    border-bottom: 0;
+    -webkit-box-shadow: 0 2px 4px #CCCCCC;
+	box-shadow: 0 2px 4px #CCCCCC;
+    display: block;
+    height: 25px;
+    padding: 5px 8px 0 8px;
+    position:relative;
+    z-index: 500;
+}
+.active a:hover{
+    background-color:white;
+}
+.active ul a:hover{
+    background-color:#eee;
+}
+
+.active ul a{
+    border: 0 !important;
+    -webkit-box-shadow: 0 2px 4px #CCCCCC;
+	box-shadow: 0 2px 4px #CCCCCC;
+    border:0;
+    width: 100%;
+}

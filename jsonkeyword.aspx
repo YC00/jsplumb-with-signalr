@@ -1,0 +1,2 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="jsonkeyword.aspx.cs" Inherits="Microsoft.AspNet.SignalR.Samples.Hubs.ShapeShare.jsonkeyword" %>
+<asp:Literal ID="jsonpanel" runat="server"></asp:Literal>
